@@ -27,6 +27,12 @@ export const createTransaction = async (req, res) => {
         })
     }
 
+    if (fromAccountId === toAccountId) {
+        return res.status(400).json({
+            message: "Cannot transfer money to your own account"
+        })
+    }
+
     //2->now validate idempotency key
 
     const isTransactionAlreadyExists = await transactionModel.findOne({
@@ -65,7 +71,7 @@ export const createTransaction = async (req, res) => {
 
     if (fromUserAccount.status != "ACTIVE" || toUserAccount.status != "ACTIVE") {
         return res.status(500).json({
-            message:"One or both accounts are not active",
+            message: "One or both accounts are not active",
         })
     }
 
