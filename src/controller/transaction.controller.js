@@ -127,15 +127,23 @@ export const createTransaction = async (req, res) => {
         })
     }
 
-    //Send email notification 
 
-    await sendTransactionEmail(req.user.email, req.user.username, amount, toAccountId)
+    // Send email in background
+    sendTransactionEmail(
+        req.user.email,
+        req.user.username,
+        amount,
+        toAccountId
+    ).catch(err => {
+        console.error("Email sending failed:", err);
+    });
 
+    // Return response immediately
     return res.status(201).json({
-        message: "Transaction Completed Succesfully",
-        transaction: transaction
+        message: "Transaction Completed Successfully",
+        transaction
+    });
 
-    })
 
 
 }
