@@ -24,8 +24,9 @@ export const userRegisterController = async (req, res) => {
         const token = generateToken(user);
         res.cookie("token", token, {
             httpOnly: true,
-            sameSite: "strict",
-            maxAge: 360000
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            secure: process.env.NODE_ENV === "production" ? true : false,
+            maxAge: 3 * 24 * 60 * 60 * 1000
         })
         res.status(201).json({
             user: {
@@ -68,8 +69,9 @@ export const userLoginController = async (req, res) => {
         const token = generateToken(user)
         res.cookie("token", token, {
             httpOnly: true,
-            sameSite: "strict",
-            maxAge: 360000
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            secure: process.env.NODE_ENV === "production" ? true : false,
+            maxAge: 3 * 24 * 60 * 60 * 1000
         })
         return res.status(200).json({
             user: {
