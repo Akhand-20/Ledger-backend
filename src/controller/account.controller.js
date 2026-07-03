@@ -9,6 +9,12 @@ export const createAccount = async (req, res) => {
             user: user._id,
             currency,
         })
+        await ledgerModel.create({
+            account: account._id,
+            amount: 1000,
+            type: "CREDIT",
+            description: "Welcome Bonus"
+        })
         return res.status(201).json({
             account
         })
