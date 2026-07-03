@@ -25,9 +25,11 @@ export const getTransactionHistory = async (req, res) => {
                 { toAccountId: accountId }
             ]
         })
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit)
+            .populate({ path: "fromAccountId", populate: { path: "user", select: "username" } })
+            .populate({ path: "toAccountId", populate: { path: "user", select: "username" } })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
 
         const total = await transactionModel.countDocuments({
             $or: [

@@ -68,17 +68,18 @@ export async function sendTransactionEmail(userEmail,username,amount,toAccount){
 }
 //for failure of trasaction
 export async function sendTransactionFailureEmail(userEmail, username, amount, toAccount) {
-    const subject = `₹${amount} Transfer Successful`;
+    const subject = `₹${amount} Transfer Failed`;
 
-    const text = `Hello ${username},\n\nWe are pleased to inform you that your transaction was completed successfully.\n\nAmount: ₹${amount}\nRecipient: ${toAccount}\n\nThank you for using Ledger App.`;
+    const text = `Hello ${username},\n\nUnfortunately your transaction of ₹${amount} to ${toAccount} could not be completed.\n\nPlease try again or contact support.\n\nThank you for using Ledger App.`;
 
     const html = `
         <p>Hello ${username},</p>
-        <p>We are pleased to inform you that your transaction was completed successfully.</p>
+        <p>Unfortunately your transaction could not be completed.</p>
         <ul>
             <li><strong>Amount:</strong> ₹${amount}</li>
             <li><strong>Recipient:</strong> ${toAccount}</li>
         </ul>
+        <p>Please try again or contact support.</p>
         <p>Thank you for using Ledger App.</p>
     `;
 

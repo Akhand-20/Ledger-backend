@@ -10,6 +10,10 @@ const options = {
         },
         servers: [
             {
+                url: "https://your-app-name.onrender.com",
+                description: "Production server"
+            },
+            {
                 url: "http://localhost:3000",
                 description: "Development server"
             }
@@ -24,7 +28,7 @@ const options = {
             }
         }
     },
-    apis: ["./src/routes/*.js"] // reads JSDoc comments from route files
+    apis: ["./src/routes/*.js"]
 }
 
 export const swaggerSpec = swaggerJsdoc(options);

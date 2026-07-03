@@ -1,7 +1,8 @@
 import express from 'express'
 import { authMiddleware } from '../middleware/auth.middleware.js'
 import { createAccount as createAccountContoller, getUserAccount as getUserAccountController,
-    getAccountBalance as getAccountBalanceController, updateAccountStatus as updateAccountStatusController
+    getAccountBalance as getAccountBalanceController, updateAccountStatus as updateAccountStatusController,
+    findAccountByUsername as findAccountByUsernameController
 } from '../controller/account.controller.js'
 
 const router = express.Router()
@@ -30,7 +31,7 @@ const router = express.Router()
  *       500:
  *         description: Server error
  */
-router.post("/", authMiddleware, createAccountContoller)//create account route
+router.post("/", authMiddleware, createAccountContoller)
 
 /**
  * @swagger
@@ -46,7 +47,7 @@ router.post("/", authMiddleware, createAccountContoller)//create account route
  *       500:
  *         description: Server error
  */
-router.get("/", authMiddleware, getUserAccountController)//acount details route
+router.get("/", authMiddleware, getUserAccountController)
 
 /**
  * @swagger
@@ -80,7 +81,41 @@ router.get("/", authMiddleware, getUserAccountController)//acount details route
  *       500:
  *         description: Server error
  */
-router.get("/balance/:accountId", authMiddleware, getAccountBalanceController)//account balance route
+router.get("/balance/:accountId", authMiddleware, getAccountBalanceController)
+
+/**
+ * @swagger
+ * /api/accounts/find/{username}:
+ *   get:
+ *     summary: Find an account by username (for sending money)
+ *     tags: [Accounts]
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Username of the recipient
+ *     responses:
+ *       200:
+ *         description: Account found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 username:
+ *                   type: string
+ *                 accountId:
+ *                   type: string
+ *       404:
+ *         description: User or account not found
+ *       500:
+ *         description: Server error
+ */
+router.get("/find/:username", authMiddleware, findAccountByUsernameController)
 
 /**
  * @swagger
@@ -119,8 +154,6 @@ router.get("/balance/:accountId", authMiddleware, getAccountBalanceController)//
  *       500:
  *         description: Server error
  */
-
-//account status update route
 router.patch("/:accountId/status", authMiddleware, updateAccountStatusController)
 
 export default router

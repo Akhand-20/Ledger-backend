@@ -44,12 +44,7 @@ export const systemUserMiddleware = async(req,res,next)=>{
 
         })
     }
-    const isBlackListed= await tokenBlacklistModel.findOne({token})
-    if(isBlackListed){
-        return res.status(401).json({
-            message:"Unauthorized access token is missing"
-        })
-    }
+    
 
     try{
         const decode =jwt.verify(token,process.env.JWT_SECRET)
