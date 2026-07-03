@@ -33,4 +33,10 @@ app.use("/api/transactions",transactionRouter)
 
 app.use(errorHandler)
 
+app.get("/", (req, res) => {
+    res.status(200).json({
+        message: "Ledgr Backend is running 🚀"
+    });
+})
+
 export default app
