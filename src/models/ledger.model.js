@@ -16,8 +16,8 @@ const ledgerSchema =new mongoose.Schema({
     //which accounts transaction it is 
     transaction:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"account",
-        required:[true,"Ledger must be associated with a user"],
+        ref:"transaction",
+        // required:[true,"Ledger must be associated with a user"],
         index:true,
         immutable:true
     },
@@ -29,6 +29,12 @@ const ledgerSchema =new mongoose.Schema({
         },
         required:[true,"Ledger type is required"],
         immutable:true
+    },
+    source: {
+        type: String,
+        enum: ["TRANSFER", "WELCOME_BONUS"],
+        default: "TRANSFER",
+        immutable: true
     }
 })
 

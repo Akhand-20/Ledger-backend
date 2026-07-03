@@ -13,7 +13,7 @@ export const createAccount = async (req, res) => {
             account: account._id,
             amount: 1000,
             type: "CREDIT",
-            description: "Welcome Bonus"
+            source: "WELCOME_BONUS"
         })
         return res.status(201).json({
             account
@@ -25,41 +25,41 @@ export const createAccount = async (req, res) => {
     }
 }
 
-export const getUserAccount=async(req,res)=>{
-    try{
-    const accounts = await accountModel.find({user:req.user._id});
+export const getUserAccount = async (req, res) => {
+    try {
+        const accounts = await accountModel.find({ user: req.user._id });
 
-    return res.status(200).json({
-        accounts
-    })
-    }catch(error){
+        return res.status(200).json({
+            accounts
+        })
+    } catch (error) {
         return res.status(500).json({
-            message:error.message
+            message: error.message
         })
     }
 }
 
-export const getAccountBalance=async(req,res)=>{
-    const {accountId}=req.params;
-    try{
-    const account=await accountModel.findOne({
-        _id:accountId,
-        user:req.user._id
-    })
-    if(!account){
-        return res.status(404).json({
-            message:"Account not found"
+export const getAccountBalance = async (req, res) => {
+    const { accountId } = req.params;
+    try {
+        const account = await accountModel.findOne({
+            _id: accountId,
+            user: req.user._id
         })
-    }
-    const balance = await account.getBalance();
+        if (!account) {
+            return res.status(404).json({
+                message: "Account not found"
+            })
+        }
+        const balance = await account.getBalance();
 
-    res.status(200).json({
-        accountId:account._id,
-        balance:balance 
-    })
-    }catch(error){
+        res.status(200).json({
+            accountId: account._id,
+            balance: balance
+        })
+    } catch (error) {
         return res.status(500).json({
-            message:error.message
+            message: error.message
         })
     }
 }
