@@ -32,14 +32,17 @@ Client-generated idempotency keys prevent duplicate processing on network retrie
 **Atomic MongoDB Sessions**
 Every transaction uses `startSession()` → `commitTransaction()` → `abortTransaction()`. Partial writes never reach the database — it's all or nothing.
 
-**Append-Only Reversals**
-Transaction reversals create new counter-entries rather than deleting history. The full audit trail is always preserved — consistent with real banking systems.
+**Append-Only Transaction Reversal (Admin-Gated)**
+Reversals are exclusively accessible to system users — regular users cannot reverse transactions, preventing senders from unilaterally recalling money after the recipient has received it. Reversal creates new counter-entries (CREDIT back to sender, DEBIT from receiver) rather than deleting history, keeping the full audit trail intact. The original transaction is marked `REVERSED` to prevent double-reversal.
 
 **Role-Based Access Control**
 System users and regular users are enforced at the middleware level. Admin operations (fund seeding, transaction reversal) are completely inaccessible to regular user tokens.
 
 **JWT Blacklisting**
 Tokens are invalidated server-side on logout via a blacklist collection — ensuring stolen tokens cannot be reused after a user logs out.
+
+**Rate Limiting**
+Auth routes (login, register) are protected with `express-rate-limit` — max 10 requests per 15 minutes per IP, blocking brute-force attacks.
 
 ## 📋 API Overview
 
